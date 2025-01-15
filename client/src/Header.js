@@ -26,20 +26,21 @@ export default function Header() {
 
   return (
     <header>
-      <Link to="/" className="logo">MyBlog</Link>
+      <Link to="/" className="logo">Switch Site</Link>
       <nav>
+      <Link to="/switches">Switches</Link>
+      <Link to="/posts">Posts</Link>
         {username && (
           <>
-            <Link to="/create">Create new post</Link>
             <a onClick={logout}>Logout ({username})</a>
           </>
         )}
-        {!username && (
+        {/* {!username && (
           <>
             <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
           </>
-        )}
+        )} */}
       </nav>
     </header>
   );
