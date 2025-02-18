@@ -10,7 +10,7 @@ export default function IndexPage() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:4000/switches')
+    fetch('http://localhost:4000/api/switches')
       .then(response => response.json())
       .then(data => {
         setSwitches(data);

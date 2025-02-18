@@ -5,20 +5,33 @@ const jwt = require('jsonwebtoken');
 const Post = require('../models/Post');
 
 const router = express.Router();
+
+// Configure multer to handle file uploads
 const upload = multer({ dest: 'uploads/' });
 const secret = process.env.JWT_SECRET;
 
 // Create Post
 router.post('/', upload.single('file'), async (req, res) => {
+  // Check if file is attached
+  if (!req.file) {
+    return res.status(400).json({ error: 'File is required' });
+  }
+
   const { token } = req.cookies;
   const { title, summary, content } = req.body;
   const { originalname, path } = req.file;
+
+  // Process file extension
   const ext = originalname.split('.').pop();
   const newPath = `${path}.${ext}`;
   fs.renameSync(path, newPath);
 
   jwt.verify(token, secret, {}, async (err, info) => {
-    if (err) throw err;
+    if (err) {
+      return res.status(403).json({ error: 'Invalid token' });
+    }
+    
+    // Create post
     const postDoc = await Post.create({
       title,
       summary,
@@ -26,6 +39,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       cover: newPath,
       author: info.id,
     });
+
     res.json(postDoc);
   });
 });

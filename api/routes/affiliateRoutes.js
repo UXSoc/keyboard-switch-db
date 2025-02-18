@@ -2,7 +2,7 @@ const AffiliateLink = require('../models/AffiliateLink');
 const router = require('express').Router();
 
 // Add Affiliate Links for a Switch
-router.post('/:id/affiliate-links', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const { id } = req.params;
   const affiliateData = req.body;
 
@@ -18,7 +18,7 @@ router.post('/:id/affiliate-links', async (req, res) => {
 });
 
 // Get Affiliate Links for a Switch
-router.get('/:id/affiliate-links', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {

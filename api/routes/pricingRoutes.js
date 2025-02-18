@@ -2,7 +2,7 @@ const Pricing = require('../models/Pricing');
 const router = require('express').Router();
 
 // Add Pricing for a Switch
-router.post('/:id/pricing', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const { id } = req.params;
   const pricingData = req.body;
 
@@ -18,7 +18,7 @@ router.post('/:id/pricing', async (req, res) => {
 });
 
 // Get Pricing for a Switch
-router.get('/:id/pricing', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {

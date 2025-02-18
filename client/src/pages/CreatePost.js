@@ -1,15 +1,32 @@
-import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
-import {useState} from "react";
-import {Navigate} from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
+import {UserContext} from "../UserContext";
+import { Navigate } from "react-router-dom";
+import ReactQuill from "react-quill-new";
+import 'react-quill-new/dist/quill.snow.css';
 import Editor from "../Editor";
 
 export default function CreatePost() {
-  const [title,setTitle] = useState('');
-  const [summary,setSummary] = useState('');
-  const [content,setContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
+  const [content, setContent] = useState('');
   const [files, setFiles] = useState('');
   const [redirect, setRedirect] = useState(false);
+
+    const {setUserInfo,userInfo} = useContext(UserContext);
+    useEffect(() => {
+      fetch('http://localhost:4000/api/users/profile', {
+        credentials: 'include',
+      }).then(response => {
+        response.json().then(userInfo => {
+          setUserInfo(userInfo);
+        });
+      });
+    }, []);
+  
+    if (userInfo==="Unauthorized") {
+      return <Navigate to="/login" />;
+    }
+
   async function createNewPost(ev) {
     const data = new FormData();
     data.set('title', title);
@@ -17,19 +34,24 @@ export default function CreatePost() {
     data.set('content', content);
     data.set('file', files[0]);
     ev.preventDefault();
-    const response = await fetch('http://localhost:4000/post', {
+
+    const response = await fetch('http://localhost:4000/api/posts', {
       method: 'POST',
       body: data,
-      credentials: 'include',
+      credentials: 'include', 
     });
+
     if (response.ok) {
       setRedirect(true);
+    } else {
+      console.error('Failed to create post:', response);
     }
   }
 
   if (redirect) {
-    return <Navigate to={'/'} />
+    return <Navigate to="/posts" />;
   }
+
   return (
     <form onSubmit={createNewPost}>
       <input type="title"

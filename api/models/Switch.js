@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const SwitchSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   type: { type: String, required: true },
   profile: { type: String },
   mount: { type: String },
