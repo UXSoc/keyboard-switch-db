@@ -1,5 +1,6 @@
+// client/src/pages/LoginPage.js
 import { useContext, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 export default function LoginPage() {
@@ -10,11 +11,11 @@ export default function LoginPage() {
 
   async function login(ev) {
     ev.preventDefault();
-    const response = await fetch('http://localhost:4000/api/users/login', { // Updated route with '/api/users'
+    const response = await fetch('http://localhost:4000/api/users/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // Include credentials for cookie-based authentication
+      credentials: 'include',
     });
     if (response.ok) {
       const userInfo = await response.json();
@@ -45,6 +46,9 @@ export default function LoginPage() {
         onChange={ev => setPassword(ev.target.value)}
       />
       <button>Login</button>
+      <p>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </form>
   );
 }

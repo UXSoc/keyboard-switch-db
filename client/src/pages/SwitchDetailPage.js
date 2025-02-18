@@ -75,10 +75,12 @@ export default function SwitchDetailPage() {
       <div>
         {affiliateLinks.map((link, index) => (
           <div key={index}>
-            <p>Vendor: {link.vendor}</p>
-            <p><a href={link.url} target="_blank" rel="noopener noreferrer">Affiliate Link</a></p>
+            <p>Vendor: {new URL(link.affiliate_url).hostname}</p>
+            <p><a href={link.affiliate_url} target="_blank" rel="noopener noreferrer">Affiliate Link</a></p>
           </div>
-        ))}
+        ))
+        }
+        {console.log(affiliateLinks)}
       </div>
 
       <h3>Force Graph</h3>
