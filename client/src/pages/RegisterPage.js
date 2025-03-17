@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -19,21 +20,26 @@ export default function RegisterPage() {
   }
 
   return (
-    <form className="register" onSubmit={register}>
-      <h1>Register</h1>
-      <input
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={ev => setUsername(ev.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={ev => setPassword(ev.target.value)}
-      />
-      <button>Register</button>
-    </form>
+    <div className="login-register-container">
+      <form className="login-register" onSubmit={register}>
+        <h1>Register</h1>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={ev => setUsername(ev.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={ev => setPassword(ev.target.value)}
+        />
+        <button>Register</button>
+        <p>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </form>
+    </div>
   );
 }

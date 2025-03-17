@@ -1,4 +1,6 @@
 // client/src/pages/LoginPage.js
+import '../App.css';
+import './style.css';
 import { useContext, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
@@ -31,24 +33,27 @@ export default function LoginPage() {
   }
 
   return (
-    <form className="login" onSubmit={login}>
-      <h1>Login</h1>
-      <input
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={ev => setUsername(ev.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={ev => setPassword(ev.target.value)}
-      />
-      <button>Login</button>
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
-    </form>
+    <div className="login-register-container">
+      <form className="login-register" onSubmit={login}>
+        <h1>Login</h1>
+        <img src="/keyboard.png" alt="keyboard" className="" />
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={ev => setUsername(ev.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={ev => setPassword(ev.target.value)}
+        />
+        <button>Login</button>
+        <p>
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
+      </form>
+    </div>
   );
 }
