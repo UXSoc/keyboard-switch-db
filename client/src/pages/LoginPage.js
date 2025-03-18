@@ -17,6 +17,7 @@ export default function LoginPage() {
     document.body.style.backgroundPosition = "center";
     document.body.style.height = "100vh";
     document.body.style.margin = "0";
+    document.body.style.overflowY = "hidden";
 
     return () => {
       document.body.style.backgroundImage = "";
@@ -25,6 +26,7 @@ export default function LoginPage() {
       document.body.style.backgroundPosition = "";
       document.body.style.height = "";
       document.body.style.margin = "";
+      document.body.style.overflowY = "";
     };
   }, []);
 
