@@ -1,7 +1,6 @@
-// client/src/pages/LoginPage.js
 import '../App.css';
 import './style.css';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
@@ -10,6 +9,24 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
   const { setUserInfo } = useContext(UserContext);
+
+  useEffect(() => {
+    document.body.style.backgroundImage = "url('/Background.png')";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.height = "100vh";
+    document.body.style.margin = "0";
+
+    return () => {
+      document.body.style.backgroundImage = "";
+      document.body.style.backgroundSize = "";
+      document.body.style.backgroundRepeat = "";
+      document.body.style.backgroundPosition = "";
+      document.body.style.height = "";
+      document.body.style.margin = "";
+    };
+  }, []);
 
   async function login(ev) {
     ev.preventDefault();
@@ -35,8 +52,10 @@ export default function LoginPage() {
   return (
     <div className="login-register-container">
       <form className="login-register" onSubmit={login}>
-        <h1>Login</h1>
-        <img src="/keyboard.png" alt="keyboard" className="" />
+        <div className="image-container">
+          <img src="/keyboard.png" alt="keyboard" className="keyboard" />
+          <div className="centered">Welcome to Keypers</div>
+        </div>
         <input
           type="text"
           placeholder="Username"
