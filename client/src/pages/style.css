@@ -1,4 +1,4 @@
-main{
+main {
     width:100vw;
     height:100vh;
     color: #FFF;
@@ -29,7 +29,6 @@ main{
     text-align: center;
     color: white;
 }
-
 .image-container {
     position: relative;
     text-align: center;
