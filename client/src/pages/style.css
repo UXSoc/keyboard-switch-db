@@ -1,7 +1,13 @@
 main{
     width:100vw;
     height:100vh;
-    overflow-y: hidden;
+    color: #FFF;
+    font-family: Montserrat;
+    font-size: 20.434px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 119%;
+    letter-spacing: 1.635px;
 }
 .login-register-container {
     display: flex;
@@ -15,15 +21,24 @@ main{
     align-items: center;
     justify-content: center;
     gap: 30px;
-    padding: 2rem;
     background: rgba(0, 0, 0, 0.38);
     backdrop-filter: blur(2.9px);
-    border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 50vw;
     height: 95vh;
     text-align: center;
     color: white;
+}
+
+.image-container {
+    position: relative;
+    text-align: center;
+    color: white;
+    font-weight:100;
+}
+.keyboard {
+    filter: blur(1px);
+    filter: brightness(40%)
 }
 input {
     padding: 10px;
@@ -47,3 +62,9 @@ button {
 button:hover {
     background: #0056b3;
 }
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
