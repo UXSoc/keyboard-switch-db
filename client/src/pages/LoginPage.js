@@ -54,6 +54,7 @@ export default function LoginPage() {
   return (
     <div className="login-register-container">
       <form className="login-register" onSubmit={login}>
+        <h1>Login</h1>
         <div className="image-container">
           <img src="/keyboard.png" alt="keyboard" className="keyboard" />
           <div className="centered">Welcome to Keypers</div>
