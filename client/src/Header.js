@@ -32,7 +32,7 @@ export default function Header() {
 
   return (
     <header>
-      <Link to="/" className="logo">Switch Site</Link>
+      <Link to="/" className="logo">Keypers</Link>
       <nav>
         <Link to="/switches">Switches</Link>
         <Link to="/posts">Posts</Link>
