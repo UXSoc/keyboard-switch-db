@@ -11,6 +11,8 @@ main {
 }
 .login-register-container {
     display: flex;
+    min-width: 630px;
+    height: 100%;
     justify-content: center;
     align-items: center;
     text-align:center;
@@ -24,17 +26,64 @@ main {
     background: rgba(0, 0, 0, 0.38);
     backdrop-filter: blur(2.9px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 50vw;
+    width: 56vw;
     height: 95vh;
     text-align: center;
     color: white;
 }
+
+.login-register input {
+    border-radius: 16px;
+    background-color: #D4D2C7;
+    font-family: 'Montserrat';
+    font-size: 12px;
+    padding: 16px;
+}
+
+.login-register p {
+    margin: 0;
+    bottom: 0;
+}
+
+.login-register button {
+    background-color: #D4D2C7;
+    width: 100px;
+    font-family: "Montserrat";
+    font-size: 15px;
+    color: black;
+    border-radius: 0;
+}
+
 .image-container {
     position: relative;
     text-align: center;
     color: white;
     font-weight:100;
 }
+
+.image-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #d4d2c7; /* Adjust opacity as needed */
+    filter: blur(2.3rem) opacity(0.46);
+    z-index: 2;
+}
+
+.image-container centered {
+    filter: blur(0.4) drop-shadow(1.3rem);
+}
+
+.image-container img {
+    filter: blur(0.13rem) brightness(0.77) saturate(3.3);
+    height: 175px;
+    width: 500px;
+    object-fit: cover;
+}
+
 .keyboard {
     filter: blur(1px);
     filter: brightness(40%)
