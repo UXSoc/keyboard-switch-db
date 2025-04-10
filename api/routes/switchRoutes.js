@@ -1,8 +1,10 @@
 const express = require('express');
-const Switch = require('../models/Switch');
 const multer = require('multer');
+const fs = require('fs');
+const Switch = require('../models/Switch');
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
+
 // Get All Switches
 router.get('/', async (req, res) => {
   const switches = await Switch.find().sort({ createdAt: -1 });
@@ -67,14 +69,49 @@ router.post('/', upload.fields([
       res.status(400).json(e);
     }
   });
-  
 
+// Update Switch (modified to handle file uploads)
+router.put('/:id', upload.fields([
+    { name: 'thumbnail', maxCount: 1 },
+    { name: 'threeDModel', maxCount: 1 },
+    { name: 'forceGraph', maxCount: 1 },
+  ]), async (req, res) => {
+    const { id } = req.params;
+    // Start with the body data for update
+    let updateData = { ...req.body };
 
-// Update Switch
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const updatedSwitch = await Switch.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(updatedSwitch);
+    // Process file uploads if present
+    if (req.files) {
+      if (req.files['thumbnail']) {
+        const file = req.files['thumbnail'][0];
+        const ext = file.originalname.split('.').pop();
+        const newPath = `${file.path}.${ext}`;
+        fs.renameSync(file.path, newPath);
+        updateData.thumbnail = newPath;
+      }
+      if (req.files['threeDModel']) {
+        const file = req.files['threeDModel'][0];
+        const ext = file.originalname.split('.').pop();
+        const newPath = `${file.path}.${ext}`;
+        fs.renameSync(file.path, newPath);
+        updateData.threeDModel = newPath;
+      }
+      if (req.files['forceGraph']) {
+        const file = req.files['forceGraph'][0];
+        const ext = file.originalname.split('.').pop();
+        const newPath = `${file.path}.${ext}`;
+        fs.renameSync(file.path, newPath);
+        updateData.forceGraph = newPath;
+      }
+    }
+
+    try {
+      const updatedSwitch = await Switch.findByIdAndUpdate(id, updateData, { new: true });
+      res.json(updatedSwitch);
+    } catch (err) {
+      console.error('Error updating switch:', err);
+      res.status(500).json({ error: 'Failed to update switch' });
+    }
 });
 
 // Delete Switch
