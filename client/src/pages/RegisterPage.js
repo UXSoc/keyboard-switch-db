@@ -1,8 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+    useEffect(() => {
+      document.body.style.backgroundImage = "url('/Background.png')";
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundRepeat = "no-repeat";
+      document.body.style.backgroundPosition = "center";
+      document.body.style.height = "100vh";
+      document.body.style.margin = "0";
+      document.body.style.overflowY = "hidden";
+  
+      return () => {
+        document.body.style.backgroundImage = "";
+        document.body.style.backgroundSize = "";
+        document.body.style.backgroundRepeat = "";
+        document.body.style.backgroundPosition = "";
+        document.body.style.height = "";
+        document.body.style.margin = "";
+        document.body.style.overflowY = "";
+      };
+    }, []);
 
   async function register(ev) {
     ev.preventDefault();
@@ -19,21 +40,30 @@ export default function RegisterPage() {
   }
 
   return (
-    <form className="register" onSubmit={register}>
-      <h1>Register</h1>
-      <input
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={ev => setUsername(ev.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={ev => setPassword(ev.target.value)}
-      />
-      <button>Register</button>
-    </form>
+    <div className="login-register-container">
+      <form className="login-register" onSubmit={register}>
+        <h1>Register</h1>
+        <div className="image-container">
+            <img src="/keyboard.png" alt="keyboard" className="keyboard" />
+            <div className="centered">Welcome to Keypers</div>
+        </div>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={ev => setUsername(ev.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={ev => setPassword(ev.target.value)}
+        />
+        <button>Register</button>
+        <p>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </form>
+    </div>
   );
 }

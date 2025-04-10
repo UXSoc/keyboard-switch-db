@@ -5,22 +5,23 @@ a{
     cursor: pointer;
 }
 body{
-    color: #222;
+    color: white;
+    background: #0B4548;
 }
 img{
     max-width: 100%;
 }
 main{
-    padding: 10px;
     max-width: 960px;
     margin: 0 auto;
 }
 header{
     display:flex;
     justify-content:space-between;
-    margin-top: 20px;
-    margin-bottom: 50px;
+    padding-top: 40px;
+    padding-bottom: 40px;
     align-items: center;
+    height:5vh;
 }
 header a{
     text-decoration:none;
