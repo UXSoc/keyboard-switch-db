@@ -41,48 +41,7 @@ const displayLabels = {
   lubricated: "Lubricated"
 };
 
-
-// List of all filterable properties (excluding profile)
-const availableFilters = [
-  "name",
-  "type",
-  "mount",
-  "pins",
-  "manufacturer",
-  "lifetime",
-  "actuation_force",
-  "bottom_out_force",
-  "pre_travel",
-  "total_travel",
-  "top_housing",
-  "bottom_housing",
-  "stem_type",
-  "stem_material",
-  "spring_material",
-  "lubricated"
-];
-
-// A mapping from field key to a display label
-const displayLabels = {
-  name: "Name",
-  type: "Type",
-  mount: "Mount",
-  pins: "Pins",
-  manufacturer: "Manufacturer",
-  lifetime: "Lifetime",
-  actuation_force: "Actuation Force",
-  bottom_out_force: "Bottom Out Force",
-  pre_travel: "Pre-Travel",
-  total_travel: "Total Travel",
-  top_housing: "Top Housing",
-  bottom_housing: "Bottom Housing",
-  stem_type: "Stem Type",
-  stem_material: "Stem Material",
-  spring_material: "Spring Material",
-  lubricated: "Lubricated"
-};
-
-export default function IndexPage() {
+export default function SwitchesPage() {
   const [switches, setSwitches] = useState([]);
   const [filteredSwitches, setFilteredSwitches] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState([]);
