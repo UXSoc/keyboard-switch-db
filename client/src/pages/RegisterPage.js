@@ -47,18 +47,24 @@ export default function RegisterPage() {
             <img src="/keyboard.png" alt="keyboard" className="keyboard" />
             <div className="centered">Welcome to Keypers</div>
         </div>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={ev => setUsername(ev.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={ev => setPassword(ev.target.value)}
-        />
+        <label className="input-fields">
+          <p>Username</p>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={ev => setUsername(ev.target.value)}
+          />
+        </label>
+        <label className="input-fields">
+          <p>Password</p>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={ev => setPassword(ev.target.value)}
+          />
+        </label>
         <button>Register</button>
         <p>
           Already have an account? <Link to="/login">Login</Link>
