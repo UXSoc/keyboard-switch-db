@@ -79,7 +79,7 @@ export default function LoginPage() {
         </label>
         <button>Login</button>
         <p>
-          Don't have an account? <Link to="/register">Register</Link>
+          Don't have an account? <Link to="/register" className="suggested-link">Register</Link>
         </p>
       </form>
     </div>

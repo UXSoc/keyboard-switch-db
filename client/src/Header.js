@@ -31,9 +31,9 @@ export default function Header() {
   const username = userInfo?.username;
 
   return (
-    <header>
+    <header style={{ padding: "2em 2.5em" }}>
       <Link to="/" className="logo">Keypers</Link>
-      <nav>
+      <nav className="header-style">
         <Link to="/switches">Switches</Link>
         <Link to="/posts">Posts</Link>
         {username ? (

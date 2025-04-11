@@ -121,4 +121,12 @@ button:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
+}
+
+.suggested-link {
+    color: #36BA98;
+}
+
+.suggested-link:hover {
+    color: #E9C46A;
+}
