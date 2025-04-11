@@ -44,16 +44,41 @@ router.post('/', upload.single('file'), async (req, res) => {
   });
 });
 
+
+
 // Get All Posts
 router.get('/', async (req, res) => {
   const posts = await Post.find().populate('author', ['username']).sort({ createdAt: -1 }).limit(20);
   res.json(posts);
 });
 
+
+// Update Post
+router.put('/:id', upload.single('file'), async (req, res) => {
+  const { id } = req.params;
+  const { title, summary, content } = req.body;
+  let updateFields = { title, summary, content };
+
+  if (req.file) {
+    const { originalname, path } = req.file;
+    const ext = originalname.split('.').pop();
+    const newPath = `${path}.${ext}`;
+    fs.renameSync(path, newPath);
+    updateFields.cover = newPath;
+  }
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(id, updateFields, { new: true });
+    res.json(updatedPost);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update post' });
+  }
+});
+
 // Get Post by ID
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const postDoc = await Post.findById(id).populate('author', ['username']);
+  const postDoc = await Post.findById(id).populate('author', ['username']);2
   res.json(postDoc);
 });
 

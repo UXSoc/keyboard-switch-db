@@ -1,324 +1,212 @@
-// src/pages/IndexPage.js
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './HomePage.css'; 
 
-// List of all filterable properties (excluding profile)
-const availableFilters = [
-  "name",
-  "type",
-  "mount",
-  "pins",
-  "manufacturer",
-  "lifetime",
-  "actuation_force",
-  "bottom_out_force",
-  "pre_travel",
-  "total_travel",
-  "top_housing",
-  "bottom_housing",
-  "stem_type",
-  "stem_material",
-  "spring_material",
-  "lubricated"
-];
+function SwitchCard({ switchItem }) {
+    const cardClassName = `switch-card-simple`;
+    const imgClassName = `switch-card-simple-img`;
 
-// A mapping from field key to a display label
-const displayLabels = {
-  name: "Name",
-  type: "Type",
-  mount: "Mount",
-  pins: "Pins",
-  manufacturer: "Manufacturer",
-  lifetime: "Lifetime",
-  actuation_force: "Actuation Force",
-  bottom_out_force: "Bottom Out Force",
-  pre_travel: "Pre-Travel",
-  total_travel: "Total Travel",
-  top_housing: "Top Housing",
-  bottom_housing: "Bottom Housing",
-  stem_type: "Stem Type",
-  stem_material: "Stem Material",
-  spring_material: "Spring Material",
-  lubricated: "Lubricated"
-};
+    return (
+      <div className={cardClassName}>
+        <Link to={`/switches/${switchItem._id}`}>
+          <img
+            src={`http://localhost:4000${switchItem.thumbnail}`}
+            alt={switchItem.name || 'Switch Image'}
+            className={imgClassName}
+            onError={(e) => {
+              console.warn(`Error loading image: ${`http://localhost:4000${switchItem.thumbnail}`}`);
+              e.target.onerror = null;
+              e.target.src = '/placeholder-image.png';
+            }}
+          />
+          <h4 className="switch-card-simple-name">{switchItem.name}</h4>
+        </Link>
+      </div>
+    );
+  }
+
 
 export default function IndexPage() {
-  const [switches, setSwitches] = useState([]);
-  const [filteredSwitches, setFilteredSwitches] = useState([]);
-  // Holds which properties the user wants to filter on (via checklist)
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  // Holds the actual filter values for each field
-  const [filters, setFilters] = useState({});
-  const [uniqueValues, setUniqueValues] = useState({});
-  const [sortField, setSortField] = useState("");
-  const [sortDirection, setSortDirection] = useState("asc"); // "asc" or "desc"
+  const [allRecentSwitches, setAllRecentSwitches] = useState([]); 
+  const [displayedSwitches, setDisplayedSwitches] = useState([]); 
 
-  // Fetch the switches data and compute unique values for each field
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 9; 
+  const totalRecentToFetch = 45;
+
+  const [allSwitches, setAllSwitches] = useState([]);
+  const [filteredAllSwitches, setFilteredAllSwitches] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [uniqueBrands, setUniqueBrands] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState('All');
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetch('http://localhost:4000/api/switches')
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
-        setSwitches(data);
-        setFilteredSwitches(data);
-        // Compute unique values for each available filter (as strings in lowercase)
-        let uniques = {};
-        availableFilters.forEach(field => {
-          uniques[field] = [
-            ...new Set(
-              data.map(sw => (sw[field] !== undefined && sw[field] !== null ? sw[field].toString().toLowerCase() : ""))
-              .filter(Boolean)
-            )
-          ];
-        });
-        setUniqueValues(uniques);
-      });
-  }, []);
+        setAllSwitches(data);
+        setFilteredAllSwitches(data);
+        const brands = [...new Set(data.map(sw => sw.manufacturer).filter(Boolean))];
+        setUniqueBrands(['All', ...brands]);
+        const sortedData = [...data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const recentSwitchesBatch = sortedData.slice(0, totalRecentToFetch);
 
-  console.log(uniqueValues);
-  // Handler for the checklist that determines which properties to filter for
-  function handleFilterSelection(e) {
-    const { value, checked } = e.target;
-    setSelectedFilters(prev => {
-      if (checked) {
-        // Initialize the filter value for the field if not already set
-        setFilters(prevFilters => ({ ...prevFilters, [value]: "" }));
-        return [...prev, value];
-      } else {
-        return prev.filter(f => f !== value);
-      }
-    });
-  }
+        setAllRecentSwitches(recentSwitchesBatch); 
 
-  // Generic handler for filter value changes (text inputs)
-  function handleFilterChange(e) {
-    const { name, value } = e.target;
-    setFilters(prev => ({ ...prev, [name]: value }));
-  }
+        setDisplayedSwitches(recentSwitchesBatch.slice(0, itemsPerPage));
+        setCurrentPage(0);
+      })
+      .catch(error => console.error("Error fetching switches:", error));
+  }, [totalRecentToFetch, itemsPerPage]); 
 
-  // Handler for checkbox filter changes (for fields with <5 unique values)
-  function handleCheckboxFilterChange(e, field) {
-    const { value, checked } = e.target;
-    setFilters(prev => {
-      const prevArr = prev[field + "_checkbox"] || [];
-      let newArr = checked ? [...prevArr, value.toLowerCase()] : prevArr.filter(v => v !== value.toLowerCase());
-      return { ...prev, [field + "_checkbox"]: newArr, [field]: "" };
-    });
-  }
 
-  // Handler for boolean filter (lubricated)
-  function handleBooleanFilterChange(e) {
-    setFilters(prev => ({ ...prev, lubricated: e.target.value }));
-  }
-
-  // Handler for sort field and direction changes
-  function handleSortFieldChange(e) {
-    setSortField(e.target.value);
-  }
-  function handleSortDirectionChange(e) {
-    setSortDirection(e.target.value);
-  }
-
-  // Apply filters and sorting whenever dependencies change
-  useEffect(() => {
-    let temp = [...switches];
-
-    // Apply each selected filter
-    selectedFilters.forEach(field => {
-      // Special handling for boolean "lubricated"
-      if (field === "lubricated") {
-        if (filters.lubricated && filters.lubricated !== "all") {
-          const boolVal = filters.lubricated === "true";
-          temp = temp.filter(sw => sw.lubricated === boolVal);
-        }
-      } else {
-        // For fields with fewer than 10 unique values, if a checkbox filter is applied
-        if (uniqueValues[field] && 1 < uniqueValues[field].length < 10 && filters[field + "_checkbox"] && filters[field + "_checkbox"].length > 0) {
-          temp = temp.filter(sw => sw[field] && filters[field + "_checkbox"].includes(sw[field].toString().toLowerCase()));
-        } 
-        // Otherwise, if a text input filter is set
-        else if (filters[field]) {
-          temp = temp.filter(sw => sw[field] && sw[field].toString().toLowerCase().includes(filters[field].toLowerCase()));
-        }
-      }
-    });
-
-    // Sorting
-    if (sortField) {
-      temp.sort((a, b) => {
-        let aVal = a[sortField] || "";
-        let bVal = b[sortField] || "";
-        if (typeof aVal === "string") aVal = aVal.toLowerCase();
-        if (typeof bVal === "string") bVal = bVal.toLowerCase();
-        if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
-        if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
-        return 0;
-      });
+   const handleNextPage = () => {
+    const nextPage = currentPage + 1;
+    const startIndex = nextPage * itemsPerPage;
+    if (startIndex < allRecentSwitches.length) { 
+      const nextSlice = allRecentSwitches.slice(startIndex, startIndex + itemsPerPage);
+      setDisplayedSwitches(nextSlice);
+      setCurrentPage(nextPage);
     }
+  };
 
-    setFilteredSwitches(temp);
-  }, [switches, filters, sortField, sortDirection, selectedFilters, uniqueValues]);
+  const handlePrevPage = () => {
+    const prevPage = currentPage - 1;
+    if (prevPage >= 0) {
+      const startIndex = prevPage * itemsPerPage;
+      const prevSlice = allRecentSwitches.slice(startIndex, startIndex + itemsPerPage);
+      setDisplayedSwitches(prevSlice);
+      setCurrentPage(prevPage);
+    }
+  };
+
+  const totalPages = Math.ceil(allRecentSwitches.length / itemsPerPage);
+  const isPrevDisabled = currentPage === 0;
+  const isNextDisabled = currentPage >= totalPages - 1; 
+
+   const handleSearchChange = (event) => {
+       setSearchTerm(event.target.value);
+   };
+   const handleSearchSubmit = (event) => {
+       event.preventDefault();
+       if (searchTerm.trim()) {
+       navigate(`/switches?search=${encodeURIComponent(searchTerm.trim())}`);
+       } else {
+       navigate('/switches');
+       }
+   };
+   const handleBrandFilter = (brand) => {
+       setSelectedBrand(brand);
+   };
+
+
+  useEffect(() => {
+    if (allSwitches.length > 0) {
+        let tempFiltered = [...allSwitches];
+        if (selectedBrand !== 'All') {
+          tempFiltered = tempFiltered.filter(sw => sw.manufacturer === selectedBrand);
+        }
+        setFilteredAllSwitches(tempFiltered);
+    }
+  }, [selectedBrand, allSwitches]); 
+
 
   return (
-    <div>
-      <h1>Switch Gallery</h1>
-      
-      {/* Preliminary Checklist for Selecting Filterable Properties */}
-      <div className="filter-checklist" style={{ width: "90%", margin: "auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
-        <h2>Select Properties to Filter</h2>
-        {availableFilters.filter(f => f !== "profile").map((field, idx) => (
-          <label key={idx} style={{ marginRight: "10px" }}>
-            <input
-              type="checkbox"
-              value={field}
-              checked={selectedFilters.includes(field)}
-              onChange={handleFilterSelection}
-            />
-            {displayLabels[field]}
-          </label>
-        ))}
+    <div className="homepage-container">
+      <div className="header-banner-image">
+        <Link to="/switches" className="view-switches-button-banner">View Switches</Link>
       </div>
+      <div className="main-content-area">
+         <div className="headline-container">
+           <h1 className="main-headline">
+             explore. design. build.
+           </h1>
+           <p className="sub-headline">discover the switch for you and your board.</p>
+         </div>
 
-      {/* Filter Inputs for the Selected Properties */}
-      <div className="filter-section" style={{ width: "90%", margin: "auto", padding: "20px", border: "1px solid #ddd", borderRadius: "8px", marginTop: "20px" }}>
-        <h2>Filter Options</h2>
-        {selectedFilters.map((field, idx) => (
-          <div key={idx} className="filter-group" style={{ marginBottom: "15px" }}>
-            <label style={{ fontWeight: "bold" }}>{displayLabels[field]}:</label>
-            {field === "lubricated" ? (
-              <select name="lubricated" value={filters.lubricated || "all"} onChange={handleBooleanFilterChange}>
-                <option value="all">All</option>
-                <option value="true">Lubricated</option>
-                <option value="false">Non-Lubricated</option>
-              </select>
-            ) : (
-              <>
-                {uniqueValues[field] && uniqueValues[field].length < 5 ? (
-                  <div style={{ display: "flex", flexWrap: "wrap" }}>
-                    {uniqueValues[field].map((val, i) => (
-                      <label key={i} style={{ marginRight: "10px" }}>
-                        <input
-                          type="checkbox"
-                          value={val}
-                          onChange={(e) => handleCheckboxFilterChange(e, field)}
-                          checked={filters[field + "_checkbox"] ? filters[field + "_checkbox"].includes(val) : false}
-                        />
-                        {val}
-                      </label>
-                    ))}
-                  </div>
-                ) : (
-                  <input
-                    type="text"
-                    name={field}
-                    value={filters[field] || ""}
-                    onChange={handleFilterChange}
-                    placeholder={`Filter by ${displayLabels[field]}`}
-                  />
-                )}
-              </>
-            )}
-          </div>
-        ))}
+         <section className="search-section">
+           <form onSubmit={handleSearchSubmit}>
+             <input
+               type="search"
+               placeholder="Search for switches..."
+               value={searchTerm}
+               onChange={handleSearchChange}
+               className="search-input"
+             />
+             <button type="submit" className="search-button">Search</button>
+           </form>
+         </section>
 
-        {/* Sort Options */}
-        <div className="filter-group">
-          <h3>Sort Options</h3>
-          <label>
-            Sort By:
-            <select value={sortField} onChange={handleSortFieldChange}>
-              <option value="">None</option>
-              {availableFilters.map((field, i) => (
-                <option key={i} value={field}>
-                  {displayLabels[field]}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div>
-            <label>
-              <input
-                type="radio"
-                name="sortDirection"
-                value="asc"
-                checked={sortDirection === "asc"}
-                onChange={handleSortDirectionChange}
-              />
-              Ascending
-            </label>
-            <label style={{ marginLeft: "10px" }}>
-              <input
-                type="radio"
-                name="sortDirection"
-                value="desc"
-                checked={sortDirection === "desc"}
-                onChange={handleSortDirectionChange}
-              />
-              Descending
-            </label>
-          </div>
-        </div>
-      </div>
+        <section className="new-switches-section">
+          <h2>New Switches</h2>
+          <div className="new-switches-carousel-wrapper"> 
+            <button
+              className="fixed-layout-nav-arrow fixed-layout-nav-arrow--prev" 
+              onClick={handlePrevPage}
+              disabled={isPrevDisabled}
+              aria-label="Previous Switches"
+            >
+              &lt;
+            </button>
 
-      {/* Gallery Section */}
-      <div
-        className="gallery"
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          width: "90%",
-          margin: "auto",
-          marginTop: "20px"
-        }}
-      >
-        {filteredSwitches.map(sw => (
-          <div
-            key={sw._id}
-            className="switch-card"
-            style={{
-              width: "23%",
-              margin: "10px 0",
-              textAlign: "center",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "10px",
-              boxSizing: "border-box"
-            }}
-          >
-            <img
-              src={`http://localhost:4000${sw.thumbnail}`}
-              alt={sw.name}
-              style={{
-                width: "100%",
-                maxHeight: "150px",
-                objectFit: "contain",
-                borderRadius: "8px",
-                marginBottom: "10px"
-              }}
-            />
-            <h2>{sw.name}</h2>
-            {/* Only display fields that were selected (except name, which is always shown) */}
-            {(selectedFilters.includes("type") || sortField === "type") && <p>{displayLabels["type"]}: {sw.type}</p>}
-            {(selectedFilters.includes("mount") || sortField === "mount") && <p>{displayLabels["mount"]}: {sw.mount}</p>}
-            {(selectedFilters.includes("manufacturer") || sortField === "manufacturer") && <p>{displayLabels["manufacturer"]}: {sw.manufacturer}</p>}
-            {(selectedFilters.includes("lifetime") || sortField === "lifetime") && <p>{displayLabels["lifetime"]}: {sw.lifetime}</p>}
-            {(selectedFilters.includes("actuation_force") || sortField === "actuation_force") && <p>{displayLabels["actuation_force"]}: {sw.actuation_force}</p>}
-            {(selectedFilters.includes("bottom_out_force") || sortField === "bottom_out_force") && <p>{displayLabels["bottom_out_force"]}: {sw.bottom_out_force}</p>}
-            {(selectedFilters.includes("pre_travel") || sortField === "pre_travel") && <p>{displayLabels["pre_travel"]}: {sw.pre_travel}</p>}
-            {(selectedFilters.includes("total_travel") || sortField === "total_travel") && <p>{displayLabels["total_travel"]}: {sw.total_travel}</p>}
-            {(selectedFilters.includes("pins") || sortField === "pins") && <p>{displayLabels["pins"]}: {sw.pins}</p>}
-            {(selectedFilters.includes("top_housing") || sortField === "top_housing") && <p>{displayLabels["top_housing"]}: {sw.top_housing}</p>}
-            {(selectedFilters.includes("bottom_housing") || sortField === "bottom_housing") && <p>{displayLabels["bottom_housing"]}: {sw.bottom_housing}</p>}
-            {(selectedFilters.includes("stem_type") || sortField === "stem_type") && <p>{displayLabels["stem_type"]}: {sw.stem_type}</p>}
-            {(selectedFilters.includes("stem_material") || sortField === "stem_material") && <p>{displayLabels["stem_material"]}: {sw.stem_material}</p>}
-            {(selectedFilters.includes("spring_material") || sortField === "spring_material") && <p>{displayLabels["spring_material"]}: {sw.spring_material}</p>}
-            {(selectedFilters.includes("lubricated") || sortField === "lubricated") && (
-              <p>{displayLabels["lubricated"]}: {sw.lubricated ? "Yes" : "No"}</p>
-            )}
-            <Link to={`/switches/${sw._id}`}>View Details</Link>
+            <div className="fixed-layout-grid">
+              {displayedSwitches.length > 0 ? (
+                displayedSwitches.map((sw, index) => (
+                   <div
+                     key={sw._id}
+                     className={`grid-item ${index === 0 ? 'grid-item--large' : 'grid-item--small'}`}
+                   >
+                     <SwitchCard switchItem={sw} />
+                   </div>
+                ))
+              ) : (
+                 allRecentSwitches.length > 0 ? <p>No more switches in this view.</p> : <p>Loading new switches...</p>
+              )}
+            </div>
+
+            <button
+              className="fixed-layout-nav-arrow fixed-layout-nav-arrow--next" 
+              onClick={handleNextPage}
+              disabled={isNextDisabled}
+              aria-label="Next Switches"
+            >
+              &gt;
+            </button>
           </div>
-        ))}
-      </div>
-    </div>
+        </section>
+
+         <section className="all-switches-preview-section">
+           <h2>Switch Gallery</h2>
+           <div className="brand-filters">
+             {uniqueBrands.map(brand => (
+               <button
+                 key={brand}
+                 onClick={() => handleBrandFilter(brand)}
+                 className={selectedBrand === brand ? 'active' : ''}
+               >
+                 {brand}
+               </button>
+             ))}
+           </div>
+           <div className="switch-grid"> 
+             {filteredAllSwitches.length > 0 ? (
+               filteredAllSwitches.map(sw => <SwitchCard key={sw._id} switchItem={sw} />)
+             ) : (
+               <p>No switches found matching the criteria.</p>
+             )}
+           </div>
+           <div className="view-all-link">
+             <Link to="/switches">View Full Gallery &rarr;</Link>
+           </div>
+         </section>
+
+      </div> 
+    </div> 
   );
 }
