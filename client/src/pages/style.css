@@ -53,6 +53,13 @@ main {
     border-radius: 0;
 }
 
+.input-fields {
+    width: 60%;
+    font-size: 15px;
+    text-align: left;
+    width: 70%;
+}
+
 .image-container {
     position: relative;
     text-align: center;
@@ -78,8 +85,8 @@ main {
 
 .image-container img {
     filter: blur(0.13rem) brightness(0.77) saturate(3.3);
-    height: 175px;
-    width: 500px;
+    width: 45rem;
+    height: 18rem;
     object-fit: cover;
 }
 
@@ -92,9 +99,9 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    width: 70%;
     margin: 0 auto;
 }
+
 button {
     padding: 10px;
     background: #007bff;
@@ -114,4 +121,12 @@ button:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
+}
+
+.suggested-link {
+    color: #36BA98;
+}
+
+.suggested-link:hover {
+    color: #E9C46A;
+}
