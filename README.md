@@ -1,6 +1,6 @@
-# Switch Site
+# Keypers
 
-Welcome to the Switch Site project! This guide will walk you through the steps to set up the development environment on your local machine, get the backend (API) and frontend (Client) running, and connect to the MongoDB Atlas database that is shared across the team.
+Welcome to the Keypers project! This guide will walk you through the steps to set up the development environment on your local machine, get the backend (API) and frontend (Client) running, and connect to the MongoDB Atlas database that is shared across the team.
 
 ## Prerequisites
 Before starting, ensure that you have the following installed:
