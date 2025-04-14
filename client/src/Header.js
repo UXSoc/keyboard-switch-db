@@ -64,6 +64,7 @@ export default function Header() {
 
        {/* Hamburger Menu Button - Hidden on Desktop */}
        <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
+        
           <i class={`fa-solid fa-${isMenuOpen ? 'times' : 'bars'}`}></i>
        </button>
 
