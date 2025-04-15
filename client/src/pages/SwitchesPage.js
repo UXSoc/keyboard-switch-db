@@ -164,8 +164,8 @@ export default function SwitchesPage() {
   }, [switches, filters, sortField, sortDirection, selectedFilters, uniqueValues]);
 
   return (
-    <div style={{ paddingLeft: "10%", paddingRight: "10%", backgroundColor: "#FFFFFF" }}>
-      <h1>Switch Gallery</h1>
+    <div style={{ paddingLeft: "10%", paddingRight: "10%", paddingTop: "10px", backgroundColor: "#FFFFFF" }}>
+      <h1 style={{color: "black"}}>Switch Gallery</h1>
       <div style={{ display: "flex", width: "100%", marginTop: "20px" }}>
         {/* Left Side: List View of Switches */}
         <div style={{ flex: "7", paddingRight: "20px" }}>
