@@ -1,0 +1,253 @@
+/* client/src/pages/SwitchDetailPage.css */
+
+.switch-detail-page {
+    padding: 20px 5%; /* Responsive padding */
+    background-color: #0B4548; /* Match theme */
+    color: #FFF;
+    max-width: 1600px; /* Limit max width */
+    margin: 0 auto; /* Center the content */
+  }
+  
+  /* Use CSS Grid for the main layout */
+  .detail-content-wrapper {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12 column grid */
+    gap: 30px; /* Gap between columns */
+    margin-top: 20px;
+  }
+  
+  /* --- Left Column Area (Images, Specs, Reviews) --- */
+  .detail-left-column {
+    grid-column: span 12; /* Full width on mobile */
+  }
+  @media (min-width: 992px) {
+    .detail-left-column {
+      grid-column: span 8; /* Takes 8 of 12 columns on larger screens */
+    }
+  }
+  
+  /* --- Right Column Area (Pricing, Ratings, Similar) --- */
+  .detail-right-column {
+    grid-column: span 12; /* Full width on mobile */
+  }
+  @media (min-width: 992px) {
+    .detail-right-column {
+      grid-column: span 4; /* Takes 4 of 12 columns on larger screens */
+    }
+  }
+  
+  
+  /* --- Switch Name --- */
+  .switch-detail-page h1 {
+    font-size: clamp(2rem, 4vw, 3rem); /* Responsive title */
+    margin-bottom: 25px;
+    color: #FFF;
+    border-bottom: 2px solid #a8dadc;
+    padding-bottom: 10px;
+  }
+  
+  /* --- Image Gallery --- */
+  .image-gallery {
+    display: flex;
+    flex-direction: column; /* Stack main image and thumbnails */
+    margin-bottom: 30px;
+  }
+  @media (min-width: 768px) {
+      .image-gallery {
+          flex-direction: row; /* Side-by-side on larger screens */
+      }
+  }
+  
+  .thumbnail-list {
+    display: flex;
+    flex-direction: row; /* Thumbnails always horizontal */
+    gap: 10px;
+    margin-top: 15px; /* Space above thumbnails */
+    order: 2; /* Show below main image on mobile */
+    flex-wrap: wrap; /* Allow wrapping */
+  }
+  @media (min-width: 768px) {
+      .thumbnail-list {
+         flex-direction: column; /* Stack vertically on desktop */
+         margin-top: 0;
+         margin-right: 15px; /* Space between thumbs and main image */
+         order: 1; /* Show left of main image */
+         flex-wrap: nowrap;
+      }
+  }
+  
+  .thumbnail-item {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background-color: #FFF; /* White background for thumbs */
+    padding: 3px;
+    transition: border-color 0.3s ease;
+  }
+  .thumbnail-item:hover,
+  .thumbnail-item.active {
+    border-color: #a8dadc; /* Highlight active/hovered thumb */
+  }
+  
+  .main-image-container {
+     flex-grow: 1;
+     order: 1; /* Show above thumbs on mobile */
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     background-color: #FFF; /* White background for main image */
+     border-radius: 8px;
+     min-height: 300px; /* Ensure some height */
+     padding: 15px;
+  }
+  @media (min-width: 768px) {
+       .main-image-container {
+           order: 2; /* Show right of thumbs */
+       }
+  }
+  
+  .main-image {
+    max-width: 100%;
+    max-height: 400px; /* Limit image height */
+    object-fit: contain;
+    display: block;
+  }
+  
+  /* --- Shared Section Styling --- */
+  .detail-section {
+      background-color: rgba(8, 49, 51, 0.5); /* Standard section background */
+      padding: 20px 25px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border: 1px solid #1a5e61;
+  }
+  .detail-section h3 {
+      font-size: 1.4rem;
+      color: #a8dadc;
+      margin: 0 0 15px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #5a8f92;
+  }
+  
+  /* --- Specs Section --- */
+  .specs-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+      gap: 10px 20px; /* Row and column gap */
+  }
+  .specs-section li {
+      font-size: 0.95rem;
+      color: #d0e0e3;
+      line-height: 1.5;
+  }
+  .specs-section li strong {
+      color: #FFF; /* White label */
+      margin-right: 8px;
+      font-weight: 600;
+  }
+  
+  /* --- Pricing Section --- */
+  .pricing-table {
+      width: 100%;
+      border-collapse: collapse; /* Clean table look */
+  }
+  .pricing-table th,
+  .pricing-table td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid #1a5e61;
+      font-size: 0.95rem;
+  }
+  .pricing-table th {
+      color: #a8dadc;
+      font-weight: 600;
+  }
+  .pricing-table td {
+      color: #d0e0e3;
+  }
+  .pricing-table td:last-child { /* Style for action/link column */
+      text-align: right;
+  }
+  .vendor-link, .affiliate-link a {
+      color: #8ecacb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+  }
+  .vendor-link:hover, .affiliate-link a:hover {
+      color: #FFF;
+      text-decoration: underline;
+  }
+  /* Placeholder for cart icon */
+  .cart-icon {
+      display: inline-block;
+      margin-left: 10px;
+      cursor: pointer;
+      /* Add background image or SVG icon here */
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+      /* Temporary appearance */
+      background-color: #a8dadc;
+      border-radius: 3px;
+  }
+  
+  
+  /* --- Affiliate Links Section --- */
+  .affiliate-links-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+  .affiliate-links-list li {
+      padding: 8px 0;
+      border-bottom: 1px dashed #1a5e61;
+  }
+  .affiliate-links-list li:last-child {
+      border-bottom: none;
+  }
+  .affiliate-links-list strong {
+      color: #FFF;
+      margin-right: 8px;
+  }
+  
+  
+  /* --- Force Graph Section --- */
+  .force-graph-section pre {
+      background-color: #0B4548; /* Match page bg */
+      color: #d0e0e3;
+      padding: 15px;
+      border-radius: 4px;
+      border: 1px solid #1a5e61;
+      overflow-x: auto; /* Allow horizontal scroll for long lines */
+      font-size: 0.85rem;
+  }
+  
+  /* --- Edit Button --- */
+  .edit-switch-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 25px;
+      background-color: #a8dadc;
+      color: #083133;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+  }
+  .edit-switch-button:hover {
+      background-color: #8ecacb;
+  }
+  
+  /* --- Placeholders --- */
+  .placeholder-section {
+      opacity: 0.6;
+      font-style: italic;
+  }

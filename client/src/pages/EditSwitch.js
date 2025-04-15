@@ -42,8 +42,7 @@ export default function EditSwitch() {
         setBottomOutForce(switchData.bottom_out_force);
         setPreTravel(switchData.pre_travel);
         setTotalTravel(switchData.total_travel);
-        setThumbnail(switchData.thumbnail); // Assuming you are storing image paths as strings
-        // Fetch pricing and affiliate links for the switch
+        setThumbnail(switchData.thumbnail); 
         fetch(`http://localhost:4000/api/pricing/${id}`)
           .then((res) => res.json())
           .then((pricingData) => setPricingRows(pricingData));

@@ -1,0 +1,123 @@
+/* client/src/Header.css */
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2.5em; /* Use em or rem for scalable padding */
+    background-color: #0B4548; /* Match background or make slightly different */
+    color: #FFF;
+    position: relative; /* Needed if mobile menu uses absolute positioning */
+    z-index: 1000; /* Ensure header stays on top */
+  }
+  
+  .logo {
+    font-weight: bold;
+    font-size: 1.6rem; /* Slightly larger */
+    color: #FFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .logo:hover {
+    color: #a8dadc; /* Lighter teal on hover */
+  }
+  
+  /* --- Desktop Navigation --- */
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Space between links */
+  }
+  
+  .header-nav a,
+  .header-nav .logout-button { /* Target both Links and the logout anchor */
+    color: #FFF;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer; /* Ensure logout button has pointer */
+  }
+  
+  .header-nav a:hover,
+  .header-nav .logout-button:hover {
+    background-color: #083133;
+    color: #a8dadc;
+  }
+  
+  .logout-button {
+    background: none; /* Ensure no default button styles */
+    border: none; /* Ensure no default button styles */
+    font-family: inherit; /* Match font */
+  }
+  
+  
+  /* --- Mobile Menu Toggle (Hamburger) --- */
+  .menu-toggle {
+    display: none; /* Hidden by default on larger screens */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin: 0;
+    z-index: 1010; /* Above the nav menu */
+    float:right;
+    max-width:50px;
+  }
+  
+
+  
+  /* --- Responsive Styles --- */
+  @media (max-width: 768px) { /* Adjust breakpoint as needed */
+    .main-header {
+      padding: 1em 1.5em; /* Reduce padding on smaller screens */
+    }
+  
+    .menu-toggle {
+      display: block; /* Show hamburger button */
+    }
+  
+    .header-nav {
+      /* Mobile menu base styles (hidden initially) */
+      display: none; /* Hide nav block */
+      position: absolute;
+      top: 100%; /* Position below the header */
+      left: 0;
+      right: 0;
+      background-color: #083133; /* Slightly darker background for menu */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 1em 0;
+      flex-direction: column; /* Stack links vertically */
+      align-items: center; /* Center items */
+      gap: 0; /* Reset gap for vertical layout */
+      border-top: 1px solid #1a5e61; /* Separator line */
+    }
+  
+    .header-nav.open {
+      display: flex; /* Show nav block when open */
+    }
+  
+    .header-nav a,
+    .header-nav .logout-button {
+      display: block; /* Make links take full width */
+      width: 100%;
+      text-align: center;
+      padding: 1em 1.5em; /* Increase padding for easier tapping */
+      border-radius: 0; /* Remove rounding for full width */
+      border-bottom: 1px solid #1a5e61; /* Separator lines */
+    }
+     .header-nav a:last-child,
+     .header-nav .logout-button:last-of-type {
+         border-bottom: none; /* Remove border from last item */
+     }
+  
+    .header-nav a:hover,
+    .header-nav .logout-button:hover {
+      background-color: #1a5e61; /* Different hover for mobile */
+      color: #FFF;
+    }
+  }
+  
