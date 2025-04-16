@@ -114,7 +114,7 @@ button {
     margin: 0 auto;
 }
 button:hover {
-    background: #0056b3;
+    background: #083133;
 }
 .centered {
     position: absolute;
@@ -129,4 +129,16 @@ button:hover {
 
 .suggested-link:hover {
     color: #E9C46A;
+}
+
+.switch-card {
+    color: black;
+}
+
+.filter-checklist {
+    color: black;
+}
+
+.filter-section {
+    color: black;
 }
