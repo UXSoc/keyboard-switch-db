@@ -26,7 +26,7 @@ export default function EditSwitch() {
 
   useEffect(() => {
     // Fetch switch data for editing
-    fetch(`http://localhost:4000/api/switches/${id}`)
+    fetch(`/api/switches/${id}`)
       .then((res) => res.json())
       .then((switchData) => {
         setName(switchData.name);
@@ -43,10 +43,10 @@ export default function EditSwitch() {
         setPreTravel(switchData.pre_travel);
         setTotalTravel(switchData.total_travel);
         setThumbnail(switchData.thumbnail); 
-        fetch(`http://localhost:4000/api/pricing/${id}`)
+        fetch(`/api/pricing/${id}`)
           .then((res) => res.json())
           .then((pricingData) => setPricingRows(pricingData));
-        fetch(`http://localhost:4000/api/affiliate-links/${id}`)
+        fetch(`/api/affiliate-links/${id}`)
           .then((res) => res.json())
           .then((affiliateData) => setAffiliateRows(affiliateData));
       });
@@ -92,7 +92,7 @@ export default function EditSwitch() {
     if (forceGraph) formData.append('forceGraph', forceGraph);
 
     // Send updated form data to the backend
-    const response = await fetch(`http://localhost:4000/api/switches/${id}`, {
+    const response = await fetch(`/api/switches/${id}`, {
       method: 'PUT',
       body: formData,
     });
@@ -104,7 +104,7 @@ export default function EditSwitch() {
       if (additionalImages.length > 0) {
         const imageFormData = new FormData();
         additionalImages.forEach((image) => imageFormData.append('images', image));
-        await fetch(`http://localhost:4000/api/switch-images/${switchData._id}`, {
+        await fetch(`/api/switch-images/${switchData._id}`, {
           method: 'POST',
           body: imageFormData,
         });
@@ -112,7 +112,7 @@ export default function EditSwitch() {
 
       // Submit pricing data
       if (pricingRows.length > 0) {
-        await fetch(`http://localhost:4000/api/pricing/${switchData._id}`, {
+        await fetch(`/api/pricing/${switchData._id}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(pricingRows),
@@ -121,7 +121,7 @@ export default function EditSwitch() {
 
       // Submit affiliate links
       if (affiliateRows.length > 0) {
-        await fetch(`http://localhost:4000/api/affiliate-links/${switchData._id}`, {
+        await fetch(`/api/affiliate-links/${switchData._id}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(affiliateRows),

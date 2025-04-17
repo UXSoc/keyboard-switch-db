@@ -52,7 +52,7 @@ export default function SwitchesPage() {
 
   // Fetch the switches data and compute unique values for each field
   useEffect(() => {
-    fetch("http://localhost:4000/api/switches")
+    fetch("/api/switches")
       .then((response) => response.json())
       .then((data) => {
         setSwitches(data);
@@ -192,7 +192,7 @@ export default function SwitchesPage() {
                 }}
               >
                 <img
-                  src={`http://localhost:4000${sw.thumbnail}`}
+                  src={`${sw.thumbnail}`}
                   alt={sw.name}
                   style={{
                     width: "100px",

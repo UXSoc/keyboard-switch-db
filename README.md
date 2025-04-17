@@ -68,42 +68,7 @@ cd keyboard-switch-db
  
     - Replace `<username>`, and `<password>` with the appropriate values from your MongoDB Atlas project.
 
-### Step 3: Backend Setup (API) 
- 
-1. **Navigate to the `api` folder** :
-
-```bash
-cd api
-```
- 
-2. **Install Dependencies** :
-Install the required dependencies using npm:
-
-
-```bash
-npm install
-```
- 
-3. **Set up Environment Variables** : 
-  - Create a `.env` file inside the `api` folder.
- 
-  - Add the MongoDB Atlas connection string (replace `<your_connection_string>` with the one you got from MongoDB Atlas):
-
-
-```bash
-MONGODB_URI=mongodb+srv://<username>:<password>@switchsite.4yliz.mongodb.net/?retryWrites=true&w=majority&appName=SwitchSite
-```
- 
-  - Make sure to replace `<username>`, `<password>`, and `<your-database-name>` with your MongoDB Atlas credentials.
- 
-4. **Start the Backend Server** :After setting up the `.env` file, you can start the backend server by running:
-
-```bash
-node index.js
-```
-The API server should now be running on `http://localhost:4000`.
-
-### Step 4: Frontend Setup (Client) 
+### Step 3: Frontend Setup (Client) 
  
 1. **Navigate to the `client` folder** :
 
@@ -119,14 +84,47 @@ Install the required dependencies using Yarn:
 yarn install
 ```
  
-3. **Start the Client Server** :
-After the dependencies are installed, you can start the client (frontend) server:
+3. **Build the client side** :
+After the dependencies are installed, you can build the client (frontend):
 
 
 ```bash
-yarn start
+yarn build
 ```
-The client server should now be running on `http://localhost:3000`.
+It should build the minified front-end that's ready for production in the `client/build` folder.
+
+
+### Step 3: Backend Setup (API) 
+ 
+ 
+1. **Install Dependencies** :
+- Go back to the root directory `cd ../`.
+- Install the required dependencies using npm:
+
+
+```bash
+npm install
+```
+ 
+2. **Set up Environment Variables** : 
+  - Create a `.env` file.
+  - Add the MongoDB Atlas connection string (replace `<your_connection_string>` with the one you got from MongoDB Atlas):
+
+
+```bash
+MONGODB_URI=mongodb+srv://<username>:<password>@switchsite.4yliz.mongodb.net/?retryWrites=true&w=majority&appName=SwitchSite
+```
+ 
+  - Make sure to replace `<username>`, `<password>`, and `<your-database-name>` with your MongoDB Atlas credentials.
+ 
+4. **Start the Backend Server** : 
+After setting up the `.env` file, you can start the backend server by running:
+
+```bash
+node api/index.js
+```
+The website should now be running on `http://localhost:4000`.
+
 
 
 

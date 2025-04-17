@@ -10,7 +10,7 @@ export default function Header() {
 
   useEffect(() => {
     // Fetch user profile
-    fetch('http://localhost:4000/api/users/profile', {
+    fetch('/api/users/profile', {
       credentials: 'include',
     })
       .then(response => {
@@ -37,7 +37,7 @@ export default function Header() {
   }, [setUserInfo]); // Dependency array
 
   function logout() {
-    fetch('http://localhost:4000/api/logout', { // Corrected API endpoint if needed
+    fetch('/api/logout', { // Corrected API endpoint if needed
       credentials: 'include',
       method: 'POST',
     })

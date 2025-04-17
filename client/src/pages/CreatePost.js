@@ -14,7 +14,7 @@ export default function CreatePost() {
 
     const {setUserInfo,userInfo} = useContext(UserContext);
     useEffect(() => {
-      fetch('http://localhost:4000/api/users/profile', {
+      fetch('/api/users/profile', {
         credentials: 'include',
       }).then(response => {
         response.json().then(userInfo => {
@@ -35,7 +35,7 @@ export default function CreatePost() {
     data.set('file', files[0]);
     ev.preventDefault();
 
-    const response = await fetch('http://localhost:4000/api/posts', {
+    const response = await fetch('/api/posts', {
       method: 'POST',
       body: data,
       credentials: 'include', 

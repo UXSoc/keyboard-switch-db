@@ -7,7 +7,7 @@ export default function PostsPage() {
   const { userInfo } = useContext(UserContext);
   const username = userInfo?.username;
   useEffect(() => {
-    fetch('http://localhost:4000/api/posts')
+    fetch('/api/posts')
       .then(response => response.json())
       .then(data => setPosts(data));
   }, []);

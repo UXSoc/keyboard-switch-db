@@ -23,11 +23,11 @@ export default function SwitchDetailPage() {
     const fetchData = async () => {
         try {
             const [switchRes, imagesRes, pricingRes, affiliateRes, forceGraphRes] = await Promise.all([
-                fetch(`http://localhost:4000/api/switches/${id}`),
-                fetch(`http://localhost:4000/api/switch-images/${id}`),
-                fetch(`http://localhost:4000/api/pricing/${id}`),
-                fetch(`http://localhost:4000/api/affiliate-links/${id}`),
-                fetch(`http://localhost:4000/api/forceGraphs/${id}`) 
+                fetch(`/api/switches/${id}`),
+                fetch(`/api/switch-images/${id}`),
+                fetch(`/api/pricing/${id}`),
+                fetch(`/api/affiliate-links/${id}`),
+                fetch(`/api/forceGraphs/${id}`) 
             ]);
 
             // Check responses before parsing JSON
@@ -45,10 +45,10 @@ export default function SwitchDetailPage() {
 
             // Set initial selected image (use thumbnail first, then first gallery image)
             if (switchJson?.thumbnail) {
-                 setSelectedImageUrl(`http://localhost:4000${switchJson.thumbnail}`);
+                 setSelectedImageUrl(`${switchJson.thumbnail}`);
             } else if (imagesJson.length > 0 && imagesJson[0].image_url) {
                 const firstImageUrl = imagesJson[0].image_url;
-                 setSelectedImageUrl(firstImageUrl.includes("://") ? firstImageUrl : `http://localhost:4000${firstImageUrl}`);
+                 setSelectedImageUrl(firstImageUrl.includes("://") ? firstImageUrl : `${firstImageUrl}`);
             } else {
                  setSelectedImageUrl('/placeholder-image.png'); // Fallback
             }
@@ -64,7 +64,7 @@ export default function SwitchDetailPage() {
 
   const handleThumbnailClick = (imageUrl) => {
       // Construct full URL if it's a relative path from the backend
-      const fullUrl = imageUrl.includes("://") ? imageUrl : `http://localhost:4000${imageUrl}`;
+      const fullUrl = imageUrl.includes("://") ? imageUrl : `${imageUrl}`;
       setSelectedImageUrl(fullUrl);
   };
 
@@ -90,7 +90,7 @@ export default function SwitchDetailPage() {
                         {switchData.thumbnail && (
                              <img
                                 key="thumb"
-                                src={`http://localhost:4000${switchData.thumbnail}`}
+                                src={`${switchData.thumbnail}`}
                                 alt={`${switchData.name} thumbnail`}
                                 className={`thumbnail-item ${selectedImageUrl.includes(switchData.thumbnail) ? 'active' : ''}`}
                                 onClick={() => handleThumbnailClick(switchData.thumbnail)}
@@ -101,7 +101,7 @@ export default function SwitchDetailPage() {
                          {images.map((image, index) => (
                              <img
                                 key={image._id || index}
-                                src={image.image_url.includes("://") ? image.image_url : `http://localhost:4000${image.image_url}`}
+                                src={image.image_url.includes("://") ? image.image_url : `${image.image_url}`}
                                 alt={`${switchData.name} image ${index + 1}`}
                                 className={`thumbnail-item ${selectedImageUrl.includes(image.image_url) ? 'active' : ''}`}
                                 onClick={() => handleThumbnailClick(image.image_url)}

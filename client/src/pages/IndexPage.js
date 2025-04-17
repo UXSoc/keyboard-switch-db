@@ -6,7 +6,7 @@ function SwitchCard({ switchItem }) {
     const cardClassName = `switch-card-simple`;
     const imgClassName = `switch-card-simple-img`;
     const thumbnailUrl = switchItem?.thumbnail
-      ? `http://localhost:4000${switchItem.thumbnail}`
+      ? `${switchItem.thumbnail}`
       : '/placeholder-image.png';
 
     return (
@@ -132,7 +132,7 @@ export default function IndexPage() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
     useEffect(() => {
-        fetch('http://localhost:4000/api/switches')
+        fetch('/api/switches')
           .then(response => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.json();

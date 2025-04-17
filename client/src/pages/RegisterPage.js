@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
   async function register(ev) {
     ev.preventDefault();
-    const response = await fetch('http://localhost:4000/api/users/register', { // Updated route with '/api/users'
+    const response = await fetch('/api/users/register', { // Updated route with '/api/users'
       method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: { 'Content-Type': 'application/json' },
