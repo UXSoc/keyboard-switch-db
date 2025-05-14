@@ -3,6 +3,3 @@ node_modules
 .env
 scraping/*
 api/.env
-Dockerfile
-.dockerignore
-fly.toml
