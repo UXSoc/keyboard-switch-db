@@ -72,7 +72,6 @@ export default function Header() {
       <nav className={`header-nav ${isMenuOpen ? 'open' : ''}`}>
         {/* Close menu when a link is clicked */}
         <Link to="/switches" onClick={() => setIsMenuOpen(false)}>Switches</Link>
-        <Link to="/posts" onClick={() => setIsMenuOpen(false)}>Posts</Link>
         {username ? (
           <>
             <button onClick={logout} className="logout-button">Logout ({username})</button>
