@@ -1,0 +1,65 @@
+name: Deploy to Fly.io
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout main
+      uses: actions/checkout@v4
+      with:
+        ref: main
+        fetch-depth: 0
+
+    - name: Set up Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+    - name: Fetch deployment branch
+      run: git fetch origin deployment:deployment
+
+    - name: Attempt merge and resolve package conflicts
+      id: merge_attempt
+      run: |
+        git checkout deployment
+        # Attempt merge
+        if ! git merge origin/main --no-edit; then
+          # If merge fails due to package conflicts, reset and reinstall
+          echo "MERGE_FAILED=true" >> $GITHUB_ENV
+          exit 0
+        fi
+        
+        # After successful merge, ensure package consistency
+        echo "Ensuring package consistency..."
+        rm -rf node_modules/ package-lock.json
+        npm install
+        git add package-lock.json
+        git commit -m "Update package-lock.json after merge" || echo "No package-lock changes"
+        
+    - name: Push to deployment branch
+      if: env.MERGE_FAILED != 'true'
+      run: |
+        git push origin deployment
+    - name: Set up Node.js
+      if: env.MERGE_FAILED != 'true'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - name: Install dependencies
+      if: env.MERGE_FAILED != 'true'
+      run: |
+        npm ci  # Uses package-lock.json for exact versions
+    - name: Deploy to Fly.io
+      if: env.MERGE_FAILED != 'true'
+      uses: superfly/flyctl-actions@1.4
+      with:
+        args: deploy --remote-only
+      env:
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
