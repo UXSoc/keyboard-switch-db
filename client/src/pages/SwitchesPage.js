@@ -50,6 +50,17 @@ export default function SwitchesPage() {
   const [sortField, setSortField] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
 
+  // Add effect to control body background
+  useEffect(() => {
+    // Set background color when component mounts
+    document.body.style.backgroundColor = '#FFFFFF';
+    
+    // Reset background color when component unmounts
+    return () => {
+      document.body.style.backgroundColor = '';
+    };
+  }, []);
+
   // Fetch the switches data and compute unique values for each field
   useEffect(() => {
     fetch("/api/switches")
@@ -164,25 +175,35 @@ export default function SwitchesPage() {
   }, [switches, filters, sortField, sortDirection, selectedFilters, uniqueValues]);
 
   return (
-    <div style={{ paddingLeft: "10%", paddingRight: "10%", paddingTop: "10px", backgroundColor: "#FFFFFF" }}>
+    <div style={{ 
+      padding: window.innerWidth > 768 ? "10px 10% 0" : "10px 15px 0",
+      backgroundColor: "#FFFFFF" 
+    }}>
       <h1 style={{color: "black"}}>Switch Gallery</h1>
-      <div style={{ display: "flex", width: "100%", marginTop: "20px" }}>
+      <div style={{ 
+        display: "flex", 
+        width: "100%", 
+        marginTop: "20px",
+        flexDirection: window.innerWidth > 768 ? "row" : "column-reverse",
+        gap: "20px"
+      }}>
         {/* Left Side: List View of Switches */}
-        <div style={{ flex: "7", paddingRight: "20px" }}>
-          <div
-            className="gallery"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "15px",
-            }}
-          >
+        <div style={{ 
+          flex: window.innerWidth > 768 ? "7" : "1",
+          paddingRight: window.innerWidth > 768 ? "20px" : "0"
+        }}>
+          <div className="gallery" style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+          }}>
             {filteredSwitches.map((sw) => (
               <div
                 key={sw._id}
                 className="switch-card"
                 style={{
                   display: "flex",
+                  flexDirection: window.innerWidth > 480 ? "row" : "column",
                   alignItems: "center",
                   border: "1px solid #ddd",
                   borderRadius: "8px",
@@ -195,15 +216,16 @@ export default function SwitchesPage() {
                   src={`${sw.thumbnail}`}
                   alt={sw.name}
                   style={{
-                    width: "100px",
-                    height: "100px",
+                    width: window.innerWidth > 480 ? "100px" : "100%",
+                    height: window.innerWidth > 480 ? "100px" : "200px",
                     objectFit: "contain",
                     borderRadius: "8px",
-                    marginRight: "15px",
+                    marginRight: window.innerWidth > 480 ? "15px" : "0",
+                    marginBottom: window.innerWidth > 480 ? "0" : "10px"
                   }}
                 />
-                <div>
-                  <h2 style={{ margin: "0 0 10px 0" }}>{sw.name}</h2>
+                <div style={{ width: "100%" }}>
+                  <h2 style={{ margin: "0 0 10px 0", fontSize: window.innerWidth > 480 ? "1.5rem" : "1.2rem" }}>{sw.name}</h2>
                   {(selectedFilters.includes("type") || sortField === "type") && (
                     <p>{displayLabels["type"]}: {sw.type}</p>
                   )}
@@ -226,29 +248,63 @@ export default function SwitchesPage() {
         </div>
 
         {/* Right Side: Filter Options */}
-        <div style={{ flex: "3", paddingLeft: "20px", borderLeft: "1px solid #ddd" }}>
+        <div style={{ 
+          flex: window.innerWidth > 768 ? "3" : "1",
+          paddingLeft: window.innerWidth > 768 ? "20px" : "0",
+          borderLeft: window.innerWidth > 768 ? "1px solid #ddd" : "none",
+          borderBottom: window.innerWidth <= 768 ? "1px solid #ddd" : "none",
+          paddingBottom: window.innerWidth <= 768 ? "20px" : "0"
+        }}>
           <div className="filter-checklist" style={{ marginBottom: "20px" }}>
-            <h2>Select Properties to Filter</h2>
-            {availableFilters.map((field, idx) => (
-              <label key={idx} style={{ marginRight: "10px" }}>
-                <input
-                  type="checkbox"
-                  value={field}
-                  checked={selectedFilters.includes(field)}
-                  onChange={handleFilterSelection}
-                />
-                {displayLabels[field]}
-              </label>
-            ))}
+            <h2 style={{ fontSize: window.innerWidth > 480 ? "1.5rem" : "1.2rem" }}>Select Properties to Filter</h2>
+            <div style={{ 
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px"
+            }}>
+              {availableFilters.map((field, idx) => (
+                <label key={idx} style={{ 
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: window.innerWidth > 480 ? "1rem" : "0.9rem",
+                  padding: "4px 0"
+                }}>
+                  <input
+                    type="checkbox"
+                    value={field}
+                    checked={selectedFilters.includes(field)}
+                    onChange={handleFilterSelection}
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      margin: "0",
+                      flex: "0 0 auto"
+                    }}
+                  />
+                  <span>{displayLabels[field]}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className="filter-section">
-            <h2>Filter Options</h2>
+            <h2 style={{ fontSize: window.innerWidth > 480 ? "1.5rem" : "1.2rem" }}>Filter Options</h2>
             {selectedFilters.map((field, idx) => (
-              <div key={idx} className="filter-group" style={{ marginBottom: "15px" }}>
-                <label style={{ fontWeight: "bold" }}>{displayLabels[field]}:</label>
+              <div key={idx} className="filter-group" style={{ 
+                marginBottom: "15px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start"
+              }}>
+                <label style={{ 
+                  fontWeight: "bold",
+                  marginBottom: "8px",
+                  alignSelf: "flex-start"
+                }}>{displayLabels[field]}:</label>
                 {field === "lubricated" ? (
                   <select
+                    style={{ width: "100%" }}
                     name="lubricated"
                     value={filters.lubricated || "all"}
                     onChange={handleBooleanFilterChange}
@@ -260,9 +316,21 @@ export default function SwitchesPage() {
                 ) : (
                   <>
                     {uniqueValues[field] && uniqueValues[field].length < 5 ? (
-                      <div style={{ display: "flex", flexWrap: "wrap" }}>
+                      <div style={{ 
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "8px",
+                        marginTop: "8px",
+                        width: "100%",
+                        alignItems: "flex-start"
+                      }}>
                         {uniqueValues[field].map((val, i) => (
-                          <label key={i} style={{ marginRight: "10px" }}>
+                          <label key={i} style={{ 
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "4px 0"
+                          }}>
                             <input
                               type="checkbox"
                               value={val}
@@ -272,13 +340,20 @@ export default function SwitchesPage() {
                                   ? filters[field + "_checkbox"].includes(val)
                                   : false
                               }
+                              style={{
+                                width: "16px",
+                                height: "16px",
+                                margin: "0",
+                                flex: "0 0 auto"
+                              }}
                             />
-                            {val}
+                            <span>{val}</span>
                           </label>
                         ))}
                       </div>
                     ) : (
                       <input
+                        style={{ width: "100%" }}
                         type="text"
                         name={field}
                         value={filters[field] || ""}
@@ -291,11 +366,20 @@ export default function SwitchesPage() {
               </div>
             ))}
 
-            <div className="filter-group">
-              <h3>Sort Options</h3>
-              <label>
+            <div className="filter-group" style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "8px"
+            }}>
+              <h3 style={{ alignSelf: "flex-start" }}>Sort Options</h3>
+              <label style={{ width: "100%" }}>
                 Sort By:
-                <select value={sortField} onChange={handleSortFieldChange}>
+                <select 
+                  value={sortField} 
+                  onChange={handleSortFieldChange}
+                  style={{ width: "100%", marginTop: "4px" }}
+                >
                   <option value="">None</option>
                   {availableFilters.map((field, i) => (
                     <option key={i} value={field}>
@@ -304,7 +388,7 @@ export default function SwitchesPage() {
                   ))}
                 </select>
               </label>
-              <div>
+              <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
                 <label>
                   <input
                     type="radio"
